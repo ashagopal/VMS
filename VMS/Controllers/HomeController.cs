@@ -28,14 +28,8 @@ namespace VMS.Controllers
             {
 
                 Vehicles = vehicles != null && vehicles.Any() ? vehicles.Select(q => q.ToVehicleViewModel()).ToList() : new List<VehicleViewModel>(),
-                VehicleAttributes=this.respository.GetAttributes(vehicleTypeId),
-                VehicleType = new[]
-                {
-                    new{
-                        Id =1,
-                        Value="Car"
-                    }
-                }
+                VehicleAttributes = this.respository.GetAttributes(vehicleTypeId),
+                VehicleType = this.respository.GetVehicleTypes()
             };
         }
     }

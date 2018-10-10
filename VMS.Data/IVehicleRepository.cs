@@ -12,5 +12,7 @@ namespace VMS.Data
         bool RemoveVehicle(int id);
         List<Vehicle> GetAllVehicles(VehicleType typeOfVehicle);
         List<Models.Attribute> GetAttributes(int vehicleTypeId);
+        bool UpdateVehicle(Vehicle modifiedVehicle);
+        List<VehicleType> GetVehicleTypes();
     }
 }

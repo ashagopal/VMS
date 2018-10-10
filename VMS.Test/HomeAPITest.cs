@@ -9,12 +9,13 @@ using VMS.ViewModels;
 namespace UnitTest
 {
     [TestFixture]
-    public class APITest
+    public class HomeAPITest
     {
-        
+
         HomeController homeController;
 
-        public APITest()
+
+        public HomeAPITest()
         {
 
         }
@@ -23,24 +24,19 @@ namespace UnitTest
         [SetUp]
         public void TestSetup()
         {
-           
 
-            
-
+            // Arrange
+            MockVehicleRepository repository = new MockVehicleRepository();
+            homeController = new HomeController(repository);
         }
-
-
-
+               
         [TestCase(1)]
         public void GetAllVehicles_ValidInput(int id)
         {
-            // Arrange
-            MockVehicleRepository repository = new MockVehicleRepository();
-            var controller = new HomeController(repository);
-           
+                      
 
             // Act
-            var response = controller.Get(id);
+            var response = homeController.Get(id);
 
             // Assert   
             Assert.IsTrue(response.Vehicles.Count>0,"The List is empty");
@@ -49,19 +45,16 @@ namespace UnitTest
         [TestCase(0)]
         public void GetAllVehicles_InvalidInput(int id)
         {
-            // Arrange
-            MockVehicleRepository repository = new MockVehicleRepository();
-            var controller = new HomeController(repository);
+            
 
 
             // Act
-            var response = controller.Get(id);
+            var response = homeController.Get(id);
 
             // Assert   
             Assert.IsTrue(response.Vehicles.Count == 0, "The List is not empty");
 
         }
-
 
     }
 

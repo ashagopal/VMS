@@ -23,19 +23,26 @@ namespace VMS.Controllers
         {
             var vehicle = respository.GetVehicle(id);
             List<KeyValuePair<string, string>> attributeValues = new List<KeyValuePair<string, string>>();
-            foreach (AttributeValue attribute in vehicle.AttributeValues)
+            if (vehicle != null)
             {
-                attributeValues.Add(new KeyValuePair<string, string>(attribute.AttributeName, attribute.Value));
+                foreach (AttributeValue attribute in vehicle.AttributeValues)
+                {
+                    attributeValues.Add(new KeyValuePair<string, string>(attribute.AttributeName, attribute.Value));
+                }
+
+                return new VehicleViewModel()
+                {
+                    Id = vehicle.Id,
+                    Make = vehicle.Make,
+                    Model = vehicle.Model,
+                    Attributes = attributeValues
+
+                };
             }
-
-            return new VehicleViewModel()
+            else
             {
-                Id = vehicle.Id,
-                Make = vehicle.Make,
-                Model = vehicle.Model,
-                Attributes = attributeValues
-
-            };
+                return null;
+            }
         }
 
         [HttpGet("add-vehicle/{vehicleTypeId}", Name = "Get")]
@@ -52,7 +59,12 @@ namespace VMS.Controllers
         [HttpPost("add-vehicle")]
         public void Post([FromBody] VehicleViewModel value)
         {
-            this.respository.AddVehicle(value.ToVehicleModel());
+            if (value.Id == 0)
+                this.respository.AddVehicle(value.ToVehicleModel());
+            else
+                this.respository.UpdateVehicle(value.ToVehicleModel());
+
+
         }
     }
 }

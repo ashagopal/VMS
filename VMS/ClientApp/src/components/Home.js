@@ -11,13 +11,13 @@ export default class Home extends Component {
         this.AddVehicleClicked = this.AddVehicleClicked.bind(this);
         this.EditVehicleClicked = this.EditVehicleClicked.bind(this);
         this.state = {
-            loading:false,
+            loading: false,
             data: {
                 vehicles: [{ attributes: [] }],
                 vehicleType: [],
-                vehicleAttributes:[]
+                vehicleAttributes: []
             },
-            selectedVehicleType: 1
+            selectedVehicleType: 0
         }
     }
 
@@ -26,7 +26,7 @@ export default class Home extends Component {
     }
 
     EditVehicleClicked(id) {
-        this.props.history.push('/edit-vehicle/' + this.state.selectedVehicleType + '/' +id);
+        this.props.history.push('/edit-vehicle/' + this.state.selectedVehicleType + '/' + id);
     }
 
     componentDidMount() {
@@ -38,7 +38,8 @@ export default class Home extends Component {
                     console.log(result);
                     this.setState({
                         data: result,
-                        loading: false
+                        loading: false,
+                        selectedVehicleType: result.vehicleType[0].id
                     });
 
                 },
@@ -46,7 +47,7 @@ export default class Home extends Component {
                     //console.log(error);
 
                 }
-        )
+            )
     }
     render() {
 
@@ -54,8 +55,26 @@ export default class Home extends Component {
             <div>
                 <Spinner showLoading={this.state.loading}></Spinner>
                 <h1>Vehicle Management System</h1>
-                
-                <Button bsStyle="success" onClick={this.AddVehicleClicked}>New Vehicle</Button>
+
+                <div className="container">
+                    <div className="row">
+                        <div className="col">
+                            <label>Vehicle Types:</label>
+                        </div>
+                        <div className="col-sm-2">
+                                <select className="form-control">
+                                    {
+                                        this.state.data.vehicleType.map((q, i) => {
+                                            return <option key={i} value={q.id}>{q.name}</option>
+                                        })
+                                    }
+                                </select>
+                            </div>
+                        <div className="col-sm-2">
+                            <Button bsStyle="success" onClick={this.AddVehicleClicked}>Add Vehicle</Button>
+                        </div>
+                    </div>
+                </div>
 
                 <Table responsive>
                     <thead>
@@ -78,32 +97,32 @@ export default class Home extends Component {
                         {
                             this.state.data.vehicles.map((p, index) => {
                                 return (
-                                <tr key={index}>
-                                    <td>{p.id}</td>
-                                    <td>{p.make}</td>
-                                    <td>{p.model}</td>
-                                    {
+                                    <tr key={index}>
+                                        <td>{p.id}</td>
+                                        <td>{p.make}</td>
+                                        <td>{p.model}</td>
+                                        {
                                             this.state.data.vehicleAttributes.map((attribute, index) => {
                                                 return (
                                                     <td key={index}>
                                                         {
                                                             p.attributes.find(q => q.key == attribute.name)
-                                                            ? p.attributes.find(q => q.key == attribute.name).value
-                                                            : ''
+                                                                ? p.attributes.find(q => q.key == attribute.name).value
+                                                                : ''
                                                         }
                                                     </td>
-                                            )
-                                        })
-                                    }
-                                    <td><a href="javascript:void(0)" onClick={() => this.EditVehicleClicked(p.id)}>Edit</a></td>
-                                </tr>)
+                                                )
+                                            })
+                                        }
+                                        <td><a href="javascript:void(0)" onClick={() => this.EditVehicleClicked(p.id)}>Edit</a></td>
+                                    </tr>)
                             })
                         }
                     </tbody>
 
 
                 </Table>
-               
+
             </div>
         );
     }

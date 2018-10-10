@@ -29,9 +29,30 @@ namespace VMS.Data.Repository
             dbContext.SaveChanges();
             return true;
         }
+        public bool UpdateVehicle(Vehicle modifiedVehicle)
+        {
+            var vehicle = GetVehicle(modifiedVehicle.Id);
+            vehicle.Make = modifiedVehicle.Make;
+            vehicle.Model = modifiedVehicle.Model;
+            modifiedVehicle.AttributeValues.ForEach(
+             q => {
+                 var attributeValue = dbContext.AttributeValue.FirstOrDefault
+                                                 (attr => attr.AttributeId == q.AttributeId && attr.VehicleId == q.VehicleId);
+                 if (attributeValue == null)                 
+                     dbContext.AttributeValue.Add(new AttributeValue() { VehicleId = q.VehicleId, AttributeId = q.AttributeId, Value = q.Value });
+                 else                 
+                     attributeValue.Value = q.Value;
+             }
 
+           );                                  
+            dbContext.SaveChanges();
+            return true;
+        }
         public List<Vehicle> GetAllVehicles(VehicleType typeOfVehicle)
         {
+            if (typeOfVehicle.Id == 0)
+                typeOfVehicle.Id = dbContext.VehicleType.FirstOrDefault().Id;
+
             var vehicles = dbContext.Vehicle.Where(q => q.VehicleTypeId == typeOfVehicle.Id).ToList();
             vehicles.ForEach(q =>
             {
@@ -85,6 +106,9 @@ namespace VMS.Data.Repository
 
         public List<Attribute> GetAttributes(int vehicleTypeId)
         {
+            if (vehicleTypeId == 0)
+                vehicleTypeId = dbContext.VehicleType.FirstOrDefault().Id;
+
             var types = dbContext.Attribute.Where(q => q.VehicleTypeId == vehicleTypeId).ToList();
             return types;
         }
