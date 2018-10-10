@@ -72,12 +72,16 @@ namespace VMS.Test.Mocks
 
         public bool UpdateVehicle(Vehicle modifiedVehicle)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public List<VehicleType> GetVehicleTypes()
         {
-            throw new NotImplementedException();
+            return new List<VehicleType>() {
+                 new VehicleType(){ Id=1,Name="Car" },
+                 new VehicleType(){ Id=2,Name="Bike" },
+                 new VehicleType(){ Id=3,Name="Truck" }
+            };
         }
     }
 }
