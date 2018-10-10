@@ -5,8 +5,6 @@ import Home from './components/Home';
 import AddVehicle from './components/AddVehicle';
 
 export default class App extends Component {
-    
-
     displayName = App.name
 
     render() {

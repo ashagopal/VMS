@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Button, DropdownButton, MenuItem } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom'
 import AddVehicle from './AddVehicle';
+import Spinner from './Spinner';
 
 export default class Home extends Component {
 
@@ -10,6 +11,7 @@ export default class Home extends Component {
         this.AddVehicleClicked = this.AddVehicleClicked.bind(this);
         this.EditVehicleClicked = this.EditVehicleClicked.bind(this);
         this.state = {
+            loading:false,
             data: {
                 vehicles: [{ attributes: [] }],
                 vehicleType: [],
@@ -28,13 +30,15 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        this.setState({ loading: true });
         fetch("https://localhost:44326/api/home/" + this.state.selectedVehicleType)
             .then(res => res.json())
             .then(
                 (result) => {
                     console.log(result);
                     this.setState({
-                        data: result
+                        data: result,
+                        loading: false
                     });
 
                 },
@@ -44,12 +48,11 @@ export default class Home extends Component {
                 }
         )
     }
-
-
     render() {
 
         return (
             <div>
+                <Spinner showLoading={this.state.loading}></Spinner>
                 <h1>Vehicle Management System</h1>
                 
                 <Button bsStyle="success" onClick={this.AddVehicleClicked}>New Vehicle</Button>
