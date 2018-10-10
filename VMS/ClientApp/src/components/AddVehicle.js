@@ -125,8 +125,9 @@ export default class AddVehicle extends Component {
                             }
                         )
                     }
-
-                    <Button type="submit">Submit</Button>
+                    {
+                        this.props.match.params.id ? '' :<Button type="submit">Submit</Button>
+                    }
                 </Form>
             </div>
         );
